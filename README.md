@@ -1,1 +1,1 @@
-# loose-client
+# Loose (Client)
