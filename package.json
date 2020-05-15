@@ -35,5 +35,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.0",
+    "@types/uuid": "^7.0.3",
+    "eslint": "^6.6.0",
+    "styled-components": "^5.1.0",
+    "uuid": "^8.0.0"
   }
 }
