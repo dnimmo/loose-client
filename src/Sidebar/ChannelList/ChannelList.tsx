@@ -67,7 +67,7 @@ const ChannelList =
                     && channels.map(x => 
                         <ChannelLink 
                             key={generateId()}
-                            href={x.slug}>
+                            href={`/channel/${x.slug}`}>
                         # {x.name}
                         </ChannelLink>
                     )

@@ -38,8 +38,8 @@ const SidebarTitle =
                       : expandFunction
               }>
               { isExpanded
-                  ? <img alt="collapse" src="./images/menu-close.svg" />
-                  : <img alt="expand" src="./images/menu-open.svg" />
+                  ? <img alt="collapse" src="/images/menu-close.svg" />
+                  : <img alt="expand" src="/images/menu-open.svg" />
               }
               {` ${title}`}
           </SidebarButton>
