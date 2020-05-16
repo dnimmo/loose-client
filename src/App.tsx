@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { BrowserRouter as Router,
+    Switch,
+    Route 
+} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import Sidebar from "./Sidebar/Sidebar";
-import MainContent from "./MainContent";
+import Channel from "./Channel";
 
 
 const Wrapper = 
@@ -17,13 +21,17 @@ const Wrapper =
 
 const App = 
   () => 
-      <div>
+      <Router>
           <SearchBar/>
           <Wrapper>
               <Sidebar/>
-              <MainContent/>
+              <Switch>
+                  <Route path="/channel/:id">
+                      <Channel></Channel>
+                  </Route>
+              </Switch>
           </Wrapper>
-      </div>;
+      </Router>;
 
 
 export default App;

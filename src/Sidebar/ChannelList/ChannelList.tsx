@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { v4 as generateId } from "uuid";
 import SidebarTitle from "../SidebarTitle";
 import { ChannelListContext, Channel } from "./ChannelListContext";
+import { Link } from "react-router-dom";
 
 const ChannelListWrapper =
   styled.div`
@@ -23,14 +24,14 @@ const channels : Channel[] =
 
 
 const ChannelLink =
-  styled.a`
+  styled.p`
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
   color: #cfc3cf;
   display: block;
   opacity: 0.8;
-  padding: 2px 25px;
+  padding: 2px 42px;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -64,16 +65,19 @@ const ChannelList =
                       isExpanded={isExpanded}
                   />
                   {isExpanded 
-                    && channels.map(x => 
-                        <ChannelLink 
-                            key={generateId()}
-                            href={`/channel/${x.slug}`}>
-                        # {x.name}
-                        </ChannelLink>
+                    && channels.map(
+                        x => 
+                            <Link 
+                                to={`/channel/${x.slug}`}
+                                key={generateId()}
+                            >
+                                <ChannelLink>
+                                  # {x.name}
+                                </ChannelLink>
+                            </Link>
                     )
                   }
               </ChannelListMenu>
-          
           </ChannelListWrapper>
       );
 

@@ -74,6 +74,12 @@ const NewMessageButton =
   cursor: pointer;`;
 
 
+const NewMessageIcon =
+  styled.img`
+  height: 16px;
+  width: 16px;`;
+
+
 const SidebarHeader = 
   () => 
       <SidebarHeaderWrapper>
@@ -85,7 +91,9 @@ const SidebarHeader =
                   <UserName>Nimmo</UserName>
               </UserNameWrapper>
           </div>
-          <NewMessageButton/>
+          <NewMessageButton>
+              <NewMessageIcon src="/images/new-post.svg"/>
+          </NewMessageButton>
       </SidebarHeaderWrapper>;
 
 
