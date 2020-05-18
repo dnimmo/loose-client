@@ -6,25 +6,34 @@ export
 interface Channel {
   name: string,
   slug: string,
+  id: string
 }
 
 
 export
 type State =
-  "EXPANDED"
-  | "COLLAPSED"
+  { 
+    active: true,
+    expanded : boolean,
+    selected : string }
+  | {
+    active : false,
+    expanded : boolean
+  }
 
 
 type Model = { 
-  state : State
-, channelList : Channel[] 
+  state : State,
+  channelList : Channel[],
 }
 
 
 const initialModel : Model = 
-  { 
-      state: "EXPANDED",
-      channelList: [{ name: "test", slug: "test"}]
+  { state: {
+      active: false,
+      expanded: true
+  }, 
+  channelList: []
   };
 
 
@@ -41,7 +50,7 @@ const ChannelListContext =
 
 
 type Action = 
-    { type: "OPEN" }
+      { type: "OPEN" }
     | { type: "CLOSE" }
 
 
@@ -51,13 +60,19 @@ const update =
       case "OPEN": 
           return {
               ...model,
-              state: "EXPANDED"
+              state: {
+                  ...model.state,
+                  expanded: true
+              }
           };
 
       case "CLOSE":
           return {
               ...model,
-              state: "COLLAPSED"
+              state: {
+                  ...model.state,
+                  expanded: false
+              }
           };
 
       default: 

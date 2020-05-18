@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-
+import { ApplicationContext } from "../Application/ApplicationContext";
 
 const colours = {
     background: "#3F0E40",
@@ -81,20 +81,35 @@ const NewMessageIcon =
 
 
 const SidebarHeader = 
-  () => 
-      <SidebarHeaderWrapper>
-          <div>
-              <MainHeading>My Loose workspace</MainHeading>
-              <UserNameWrapper>
-                  <StatusIndicator 
-                      active={true}/>
-                  <UserName>Nimmo</UserName>
-              </UserNameWrapper>
-          </div>
-          <NewMessageButton>
-              <NewMessageIcon src="/images/new-post.svg"/>
-          </NewMessageButton>
-      </SidebarHeaderWrapper>;
+  () => {
+      const {
+          applicationState
+      } =
+      useContext(ApplicationContext);
+
+
+      const username =
+        applicationState.name === "DATA_LOADED"
+            ? applicationState.username
+            : "Unknown";
+
+
+      return (
+          <SidebarHeaderWrapper>
+              <div>
+                  <MainHeading>My Loose workspace</MainHeading>
+                  <UserNameWrapper>
+                      <StatusIndicator 
+                          active={true}/>
+                      <UserName>{ username }</UserName>
+                  </UserNameWrapper>
+              </div>
+              <NewMessageButton>
+                  <NewMessageIcon src="/images/new-post.svg"/>
+              </NewMessageButton>
+          </SidebarHeaderWrapper>
+      );
+  };
 
 
 export default SidebarHeader;

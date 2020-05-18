@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { v4 as generateId } from "uuid";
+import { Link } from "react-router-dom";
 import SidebarTitle from "../SidebarTitle";
 import { ChannelListContext, Channel } from "./ChannelListContext";
-import { Link } from "react-router-dom";
+import { ApplicationContext } from "../../Application/ApplicationContext";
 
 const ChannelListWrapper =
   styled.div`
@@ -16,13 +17,6 @@ const ChannelListMenu =
   `;
 
 
-const channels : Channel[] =
-  [
-      {name: "general", slug: "general"}, 
-      {name: "random", slug: "random"}
-  ];
-
-
 const ChannelLink =
   styled.p`
   font-size: 15px;
@@ -32,6 +26,7 @@ const ChannelLink =
   display: block;
   opacity: 0.8;
   padding: 2px 42px;
+  margin: 2px 0;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -48,12 +43,24 @@ const ChannelList =
           collapseChannelList,
           expandChannelList
       } =
-        React.useContext(ChannelListContext);
+        useContext(ChannelListContext);
+
+
+      const {
+          applicationState 
+      } =
+        useContext(ApplicationContext);
 
 
       const isExpanded =
-        state === "EXPANDED";
+        state.expanded;
       
+
+      const channels =
+          applicationState.name === "DATA_LOADED"
+              ? applicationState.channels
+              : [];
+
         
       return (
           <ChannelListWrapper>
@@ -68,11 +75,12 @@ const ChannelList =
                     && channels.map(
                         x => 
                             <Link 
-                                to={`/channel/${x.slug}`}
+                                to={`/channel/${x.id}`}
                                 key={generateId()}
+                                style={ {textDecoration: "none"} }
                             >
                                 <ChannelLink>
-                                  # {x.name}
+                                  # {x.slug}
                                 </ChannelLink>
                             </Link>
                     )
