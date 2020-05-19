@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { v4 as generateId } from "uuid";
 import { Link } from "react-router-dom";
 import SidebarTitle from "../SidebarTitle";
-import { ChannelListContext, Channel } from "./ChannelListContext";
+import { ChannelListContext } from "./ChannelListContext";
 import { ApplicationContext } from "../../Application/ApplicationContext";
 
 const ChannelListWrapper =

@@ -100,7 +100,7 @@ const SidebarHeader =
                   <MainHeading>My Loose workspace</MainHeading>
                   <UserNameWrapper>
                       <StatusIndicator 
-                          active={true}/>
+                          active={ true }/>
                       <UserName>{ username }</UserName>
                   </UserNameWrapper>
               </div>

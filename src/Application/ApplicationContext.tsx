@@ -9,12 +9,10 @@ type State =
   | 
   { name : "DATA_LOADED", 
       username: string, 
-      channels: {
-         id: string, 
-         name: string, 
-         content: string[],
-         slug: string
-        }[] }
+      channels: { 
+        id: string, 
+        slug: string, 
+      }[]  }
 
 
 const initialState : State =
@@ -38,13 +36,11 @@ const ApplicationContext =
 type Action =
     { type: "REQUEST_DATA", userId: string }
   | { 
-      type: "UPDATE_APP_DATA_FROM_SERVER", 
+      type: "UPDATE_CHANNEL_LIST_FROM_SERVER", 
       username: string,
       channels: { 
         id: string, 
-        name: string, 
         slug: string, 
-        content: string[] 
       }[] 
     }
 
@@ -58,7 +54,7 @@ const update =
               name: "LOADING"
           };
 
-      case "UPDATE_APP_DATA_FROM_SERVER":
+      case "UPDATE_CHANNEL_LIST_FROM_SERVER":
           return {
               ...state,
               name: "DATA_LOADED",
@@ -87,18 +83,18 @@ const ApplicationProvider =
                 dispatch({ type: "REQUEST_DATA", userId });
 
                 const applicationInfo = 
-                  await fetch("http://localhost:8000/");
-
+                  await fetch("http://localhost:8000/channelList/nimmo");
+                  
                 const response = 
                   await applicationInfo.json();
 
-                const data =
+                const channels =
                   JSON.parse(response.body); 
 
                 dispatch({ 
-                    type: "UPDATE_APP_DATA_FROM_SERVER", 
-                    username: data.username, 
-                    channels: data.channels
+                    type: "UPDATE_CHANNEL_LIST_FROM_SERVER", 
+                    username: "Nimmo", 
+                    channels,
                 });
             },
             [dispatch]);

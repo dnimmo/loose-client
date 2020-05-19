@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { ApplicationContext } from "../Application/ApplicationContext";
+import React, { useContext, useEffect } from "react";
+import { ChannelContext } from "./ChannelContext";
 import styled from "styled-components";
 import {
     useParams
@@ -14,9 +14,34 @@ const ChannelWrapper =
   `;
 
 
-const ChannelView =  
-  styled.div`
-  padding: 40px;`;
+const ChannelHeader =  
+  styled.header`
+  padding: 11px 15px 4px;
+  border-bottom: 1px solid #d8d8d8;
+  `;
+
+
+const ChannelTitle =
+  styled.h1`
+  display: inline;
+  margin: 0;
+  font-size: 14px;
+  `
+
+
+const ChannelSubtitle =
+  styled.span`
+  font-size: 14px;
+  color: #999;
+  `
+
+
+const ChannelDescription =
+  styled.p`
+  font-size: 14px;
+  margin: 0;
+  color: #999;
+  `
 
 
 const Channel =
@@ -26,26 +51,40 @@ const Channel =
       } =
         useParams();
 
-      
+
       const {
-          applicationState
+          channelState,
+          requestChannelInfo
       } =
-        useContext(ApplicationContext);
+        useContext(ChannelContext);
 
 
-      const channels =
-        applicationState.name === "DATA_LOADED"
-            ? applicationState.channels
-            : []; // It isn't really possible to get to this point without the application being in the "DATA_LOADED" state, but Typescript doesn't have a way to know this sadly.
+      useEffect(
+        () => {
+          if (channelState.name === "INITIAL_LOAD") {
+            requestChannelInfo(channelId)
+          }
+        }
+      )
 
 
-      const activeChannel = 
-          channels.find(({ id }) => id === channelId);
+      const channelDetails =
+        channelState.name === "LOADED"
+            ? channelState.channelDetails
+            : { name : "", slug: "", description: "" }; // It isn't really possible to get to this point without the application being in the "LOADED" state, but Typescript doesn't seem to have a way to know this sadly.
+
+
+      const { name, slug, description } = 
+          channelDetails
 
 
       return (
           <ChannelWrapper>
-              <ChannelView>{(activeChannel && activeChannel.name) || "none"}</ChannelView>
+              <ChannelHeader>
+                <ChannelTitle>{(name) || ""}</ChannelTitle>
+                <ChannelSubtitle> (#{slug})</ChannelSubtitle>
+                <ChannelDescription>{(description) || ""}</ChannelDescription>
+              </ChannelHeader>
           </ChannelWrapper>
       );
   };
