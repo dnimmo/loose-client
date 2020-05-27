@@ -98,7 +98,7 @@ const SidebarHeader =
       return (
           <SidebarHeaderWrapper>
               <div>
-                  <MainHeading>My Loose workspace</MainHeading>
+                  <MainHeading>DavidNimmoCV</MainHeading>
                   <UserNameWrapper>
                       <StatusIndicator 
                           active={ true }/>

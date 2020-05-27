@@ -11,6 +11,8 @@ const ChannelWrapper =
   background-color: #fff;
   box-shadow: inset 5px 5px 10px rgba(0,0,0,0.1);
   color: #000;
+  height: 100vh;
+  overflow: overlay;
   `;
 
 
@@ -50,9 +52,8 @@ const PostWrapper =
   display: grid;
   grid-template-columns: 50px 1fr;
   border-top: 1px solid rgb(216, 216, 216);
-  &:first-of-type{
-    margin-top: 40px;
-  };
+  margin-top: -15px;
+  z-index: 9;
   &:last-of-type{
     margin-bottom: 40px;
   }`
@@ -77,12 +78,15 @@ const Username =
   font-weight: bold;
   `
 
- 
+const DateWrapper =
+  styled.div`
+  display: grid;
+  grid-template-columns: 40% 20% 40%;
+  `
+
 const Date = 
-  styled.span`
-  position: absolute;
-  left: 55%;
-  margin-top: -14px;
+  styled.div`
+  text-align: center;
   font-size: 13px;
   font-weight: bold;  
   background-color: white;
@@ -149,7 +153,11 @@ const Channel =
                 posts.map(
                     ({ mainPostContent, date, link, linkText }) => 
                     <div>
-                      <Date>{ date }</Date>
+                      <DateWrapper>
+                        <span></span>
+                        <Date>{ date }</Date>
+                        <span></span>
+                      </DateWrapper>
                       <PostWrapper>
                         <Avatar
                           src="/images/nimmo.png"
