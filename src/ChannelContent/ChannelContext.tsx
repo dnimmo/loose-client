@@ -25,7 +25,13 @@ type ChannelDetails = {
     id: string, 
     name: string, 
     slug: string, 
-    content: string[],
+    content: { 
+      mainPostContent: string, 
+      threadContent: string[],
+      date: string,
+      link: string,
+      linkText: string
+    }[],
     description: string,
 }
 

@@ -44,6 +44,58 @@ const ChannelDescription =
   `
 
 
+const PostWrapper = 
+  styled.div`
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  border-top: 1px solid rgb(216, 216, 216);
+  &:first-of-type{
+    margin-top: 40px;
+  };
+  &:last-of-type{
+    margin-bottom: 40px;
+  }`
+
+
+const Avatar =
+  styled.img`
+  height: 37px;
+  border-radius: 37px;
+  `
+
+
+const PostContent =
+  styled.div`
+  display: grid;
+  grid-layout-rows: 20% 1fr;
+  `
+
+
+const Username = 
+  styled.span`
+  font-weight: bold;
+  `
+
+ 
+const Date = 
+  styled.span`
+  position: absolute;
+  left: 55%;
+  margin-top: -14px;
+  font-size: 13px;
+  font-weight: bold;  
+  background-color: white;
+  padding: 3px 10px;
+  border: 1px solid rgb(216, 216, 216);
+  border-radius: 20px;
+  `
+
+
+const Link =
+  styled.a``
+
+
 const Channel =
   () => {
       const {
@@ -71,11 +123,17 @@ const Channel =
       const channelDetails =
         channelState.name === "LOADED"
             ? channelState.channelDetails
-            : { name : "", slug: "", description: "" }; // It isn't really possible to get to this point without the application being in the "LOADED" state, but Typescript doesn't seem to have a way to know this sadly.
+            : { name : "", slug: "", description: "", content: [] }; // It isn't really possible to get to this point without the application being in the "LOADED" state, but Typescript doesn't seem to have a way to know this sadly.
 
 
-      const { name, slug, description } = 
+      const { name, slug, description, content } = 
           channelDetails
+
+
+      const posts = 
+        channelState.name === "LOADED"
+          ? content
+          : []
 
 
       return (
@@ -83,8 +141,36 @@ const Channel =
               <ChannelHeader>
                 <ChannelTitle>{(name) || ""}</ChannelTitle>
                 <ChannelSubtitle> (#{slug})</ChannelSubtitle>
-                <ChannelDescription>{(description) || ""}</ChannelDescription>
+                <ChannelDescription>
+                  {(description) || ""}
+                </ChannelDescription>
               </ChannelHeader>
+              { 
+                posts.map(
+                    ({ mainPostContent, date, link, linkText }) => 
+                    <div>
+                      <Date>{ date }</Date>
+                      <PostWrapper>
+                        <Avatar
+                          src="/images/nimmo.png"
+                        />
+                        <PostContent>
+                          <Username>Nimmo</Username>
+                          {mainPostContent}
+                          { 
+                          link && 
+                            <Link 
+                              href={link}
+                              target="_blank"
+                            >
+                              {linkText}
+                            </Link>
+                          }
+                        </PostContent>
+                      </PostWrapper>
+                    </div>
+                  ) 
+              }
           </ChannelWrapper>
       );
   };
