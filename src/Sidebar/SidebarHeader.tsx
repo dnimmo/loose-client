@@ -69,9 +69,10 @@ const NewMessageButton =
   styled.button`
   border-radius: 50px;
   margin: 13px;
-  width: 37px;
-  height: 37px;
-  cursor: pointer;`;
+  width: 33px;
+  height: 33px;
+  cursor: pointer;
+  outline: none;`;
 
 
 const NewMessageIcon =
