@@ -68,7 +68,7 @@ const App =
 
         return (
             <Router>
-                <SearchBar/>
+                {/* <SearchBar/> */}
                 { chooseState(applicationState) }
             </Router>
         );

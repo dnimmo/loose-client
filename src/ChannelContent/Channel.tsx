@@ -20,6 +20,9 @@ const ChannelHeader =
   styled.header`
   padding: 11px 15px 4px;
   border-bottom: 1px solid #d8d8d8;
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
   `;
 
 
@@ -100,6 +103,67 @@ const Link =
   styled.a``
 
 
+const ThreadLinkWrapper =
+  styled.div`
+  margin-top: 10px;
+  `
+
+const ThreadLinkImage = 
+  styled.img`
+  border-radius: 50px;
+  height:20px;`
+
+const ThreadLinkText =
+  styled.button`
+  text-decoration: none;
+  font-size: 14px;
+  margin-left: 5px;
+  vertical-align: top;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1264A3;
+  margin-top: 1px;
+  &:hover{
+    text-decoration: underline;
+  }`
+
+const ThreadLink =
+  ({ replies, openThreadFunction }) => 
+    <ThreadLinkWrapper>
+      <ThreadLinkImage
+        src={"/images/nimmo.png"}/>
+      <ThreadLinkText onClick={ openThreadFunction }>
+        {`${replies.length} ${replies.length === 1 ? 'reply' : 'replies'}`}
+      </ThreadLinkText>
+    </ThreadLinkWrapper>
+
+
+const ThreadWrapper =
+  styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #fff;
+  width: 50%;
+  height: 100%;
+  border-left: 1px solid #d8d8d8;
+  overflow: scroll;
+  `
+
+
+const CloseThreadButton =
+  styled.button`
+  background: none;
+  border: 1px solid #777;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  `
+
+
 const Channel =
   () => {
       const {
@@ -110,7 +174,9 @@ const Channel =
 
       const {
           channelState,
-          requestChannelInfo
+          requestChannelInfo,
+          openThread,
+          closeThread
       } =
         useContext(ChannelContext);
 
@@ -125,9 +191,9 @@ const Channel =
 
 
       const channelDetails =
-        channelState.name === "LOADED"
+        channelState.name === "LOADED" || channelState.name === "DISPLAYING_THREAD"
             ? channelState.channelDetails
-            : { name : "", slug: "", description: "", content: [] }; // It isn't really possible to get to this point without the application being in the "LOADED" state, but Typescript doesn't seem to have a way to know this sadly.
+            : { name : "", slug: "", description: "", content: [], id: "" }; // It isn't really possible to get to this point without the application being in the "LOADED" state, but Typescript doesn't seem to have a way to know this sadly.
 
 
       const { name, slug, description, content } = 
@@ -135,9 +201,19 @@ const Channel =
 
 
       const posts = 
-        channelState.name === "LOADED"
+        channelState.name === "LOADED" || channelState.name === "DISPLAYING_THREAD"
           ? content
           : []
+
+      const threadPosts = 
+        channelState.name === "DISPLAYING_THREAD"
+          ? channelState.threadContent
+          : []
+
+      const threadTitle =
+        channelState.name === "DISPLAYING_THREAD"
+          ? channelState.title
+          : "Error"
 
 
       return (
@@ -149,10 +225,15 @@ const Channel =
                   {(description) || ""}
                 </ChannelDescription>
               </ChannelHeader>
+              <div style={{marginTop: '80px'}}></div>
               { 
                 posts.map(
-                    ({ mainPostContent, date, link, linkText }) => 
-                    <div>
+                    ({ mainPostContent, date, link, linkText, threadContent }) => 
+                    <div style={
+                      channelState.name === "DISPLAYING_THREAD"
+                        ? { opacity: 0.3 }
+                        : { opacity: 1  }
+                    }>
                       <DateWrapper>
                         <span></span>
                         <Date>{ date }</Date>
@@ -174,10 +255,56 @@ const Channel =
                               {linkText}
                             </Link>
                           }
+                          {
+                            threadContent && threadContent.length > 0
+                              ? <ThreadLink
+                                  replies={threadContent} 
+                                  openThreadFunction={() => openThread({ threadContent, channelDetails, title: mainPostContent })}
+                                />
+                              : null
+                          }
                         </PostContent>
                       </PostWrapper>
                     </div>
                   ) 
+              }
+              { channelState.name === "DISPLAYING_THREAD" 
+                ? <ThreadWrapper>
+                    <ChannelHeader>
+                        <ChannelTitle>Thread</ChannelTitle>
+                        <ChannelDescription>
+                          { threadTitle }
+                        </ChannelDescription>
+                        <CloseThreadButton
+                          onClick={() => closeThread({ channelDetails })}>
+                          Close thread
+                        </CloseThreadButton>
+                    </ChannelHeader>
+                    <div style={{marginTop: '110px'}}></div>
+                    { threadPosts.map(
+                        ({ text, link, linkText }) =>
+                        <PostWrapper>
+                        <Avatar
+                          src="/images/nimmo.png"
+                        />
+                        <PostContent>
+                          <Username>Nimmo</Username>
+                          {text}
+                          { 
+                          link && 
+                            <Link 
+                              href={link}
+                              target="_blank"
+                            >
+                              {linkText}
+                            </Link>
+                          }
+                        </PostContent>
+                      </PostWrapper> 
+                        )  
+                    }
+                  </ThreadWrapper>
+                : null 
               }
           </ChannelWrapper>
       );

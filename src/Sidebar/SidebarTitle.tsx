@@ -26,8 +26,6 @@ const SidebarButton =
 
 const SidebarTitleWrapper = 
   styled.div`
-  display: grid;
-  grid-template-columns: 65% 1fr 1fr;
   padding: 2px 0 2px 12px;
   margin-top: 10px;
   margin-bottom: 0;
@@ -63,12 +61,6 @@ const SidebarTitle =
                   : <img alt="expand" src="/images/menu-open.svg" />
               }
               <SidebarTitleText>{title}</SidebarTitleText>
-          </SidebarButton>
-          <SidebarButton>
-              <img alt="options" src="/images/settings.svg" />
-          </SidebarButton>
-          <SidebarButton>
-              <img alt="new" src="/images/create-new.svg" />
           </SidebarButton>
       </SidebarTitleWrapper>;
 
