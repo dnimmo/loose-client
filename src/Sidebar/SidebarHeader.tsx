@@ -65,21 +65,6 @@ const UserName =
   margin-left: -5px;
   `;
 
-const NewMessageButton =
-  styled.button`
-  border-radius: 50px;
-  margin: 13px;
-  width: 33px;
-  height: 33px;
-  cursor: pointer;
-  outline: none;`;
-
-
-const NewMessageIcon =
-  styled.img`
-  height: 16px;
-  width: 16px;`;
-
 
 const SidebarHeader = 
   () => {
@@ -105,9 +90,6 @@ const SidebarHeader =
                       <UserName>{ username }</UserName>
                   </UserNameWrapper>
               </div>
-              <NewMessageButton>
-                  <NewMessageIcon src="/images/new-post.svg"/>
-              </NewMessageButton>
           </SidebarHeaderWrapper>
       );
   };

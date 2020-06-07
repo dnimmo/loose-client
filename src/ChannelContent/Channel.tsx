@@ -9,10 +9,12 @@ import {
 const ChannelWrapper =
   styled.section`
   background-color: #fff;
-  box-shadow: inset 5px 5px 10px rgba(0,0,0,0.1);
   color: #000;
-  height: 100vh;
-  overflow: overlay;
+  @media screen and (min-width:450px){
+    box-shadow: inset 5px 5px 10px rgba(0,0,0,0.1);
+    height: 100vh;
+    overflow: overlay;
+  };
   `;
 
 
@@ -20,9 +22,11 @@ const ChannelHeader =
   styled.header`
   padding: 11px 15px 4px;
   border-bottom: 1px solid #d8d8d8;
-  position: fixed;
   width: 100%;
   background-color: #fff;
+  @media screen and (min-width:450px){
+    position: fixed;
+  }
   `;
 
 
@@ -49,6 +53,29 @@ const ChannelDescription =
   `
 
 
+interface PostDisplayManagerInterface {
+  hidePost : boolean
+}
+
+
+const PostDisplayManager =
+  styled.div`
+  display: ${(props : PostDisplayManagerInterface) => 
+    props.hidePost 
+    ? 'none' 
+    : 'block'
+  };
+  @media screen and (min-width:450px){
+    display: block;
+    opacity: ${(props : PostDisplayManagerInterface) => 
+      props.hidePost 
+      ? '0.3' 
+      : '1'
+    };
+  }
+  `
+
+
 const PostWrapper = 
   styled.div`
   padding: 20px;
@@ -57,8 +84,10 @@ const PostWrapper =
   border-top: 1px solid rgb(216, 216, 216);
   margin-top: -15px;
   z-index: 9;
-  &:last-of-type{
-    margin-bottom: 40px;
+  @media screen and (min-width:450px){
+    &:last-of-type{
+      margin-bottom: 40px;
+    } 
   }`
 
 
@@ -84,7 +113,10 @@ const Username =
 const DateWrapper =
   styled.div`
   display: grid;
-  grid-template-columns: 40% 20% 40%;
+  grid-template-columns: 20% 60% 20%;
+  @media screen and (min-width:800px){
+    grid-template-columns: 40% 20% 40%;
+  }
   `
 
 const Date = 
@@ -112,6 +144,7 @@ const ThreadLinkImage =
   styled.img`
   border-radius: 50px;
   height:20px;`
+
 
 const ThreadLinkText =
   styled.button`
@@ -146,10 +179,13 @@ const ThreadWrapper =
   top: 0;
   right: 0;
   background: #fff;
-  width: 50%;
+  width: 100%;
   height: 100%;
   border-left: 1px solid #d8d8d8;
   overflow: scroll;
+  @media screen and (min-width:450px){
+    width: 50%;
+  };
   `
 
 
@@ -161,6 +197,22 @@ const CloseThreadButton =
   padding: 5px 10px;
   margin: 5px 0;
   cursor: pointer;
+  `
+
+const ChannelTopSpacing =
+  styled.div`
+  height: 20px;
+  @media screen and (min-width:450px) {
+    height: 80px;
+  };
+  `
+
+const ThreadSpacing =
+  styled.div`
+  height: 14px;
+  @media screen and (min-width:450px) {
+    height: 110px;
+  }
   `
 
 
@@ -225,15 +277,13 @@ const Channel =
                   {(description) || ""}
                 </ChannelDescription>
               </ChannelHeader>
-              <div style={{marginTop: '80px'}}></div>
+              <ChannelTopSpacing></ChannelTopSpacing>
               { 
                 posts.map(
                     ({ mainPostContent, date, link, linkText, threadContent }) => 
-                    <div style={
-                      channelState.name === "DISPLAYING_THREAD"
-                        ? { opacity: 0.3 }
-                        : { opacity: 1  }
-                    }>
+                    <PostDisplayManager 
+                      hidePost={channelState.name === "DISPLAYING_THREAD"}
+                    >
                       <DateWrapper>
                         <span></span>
                         <Date>{ date }</Date>
@@ -265,7 +315,7 @@ const Channel =
                           }
                         </PostContent>
                       </PostWrapper>
-                    </div>
+                    </PostDisplayManager>
                   ) 
               }
               { channelState.name === "DISPLAYING_THREAD" 
@@ -280,7 +330,7 @@ const Channel =
                           Close thread
                         </CloseThreadButton>
                     </ChannelHeader>
-                    <div style={{marginTop: '110px'}}></div>
+                    <ThreadSpacing></ThreadSpacing>
                     { threadPosts.map(
                         ({ text, link, linkText }) =>
                         <PostWrapper>

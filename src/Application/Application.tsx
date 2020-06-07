@@ -5,18 +5,19 @@ import { BrowserRouter as Router,
     Switch,
     Route
 } from "react-router-dom";
-import SearchBar from "../SearchBar";
 import Sidebar from "../Sidebar/Sidebar";
 import ChannelIndex from "../ChannelContent/ChannelIndex";
 
 
 const Wrapper = 
   styled.div`
-  display: grid;
-  grid-template-columns: 257px 1fr;
   min-height: 95vh;
   color: white;
   font-family: 'Hind', sans-serif;
+  @media(min-width: 450px){
+    display: grid;
+    grid-template-columns: 257px 1fr;
+  }
   `;
 
 
