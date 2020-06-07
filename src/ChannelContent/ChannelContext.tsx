@@ -1,10 +1,9 @@
-import React, { createContext, useReducer } from 'react'
-
+import React, { createContext, useReducer } from 'react';
+import getChannel from '../data/channels';
 
 export
 type State =
     { name : "INITIAL_LOAD" }
-  | { name : "LOADING_CHANNEL_INFO" }
   | { name : "LOADED", 
       channelDetails: ChannelDetails
     }
@@ -17,7 +16,7 @@ type State =
 
 interface ChannelContextValue {
   channelState : State,
-  requestChannelInfo : (string) => Promise<void>,
+  requestChannelInfo : (string) => void,
   openThread: ({ channelDetails, threadContent, title } : { channelDetails: ChannelDetails, threadContent: ThreadContent[], title: string }) => void,
   closeThread: ({ channelDetails } : { channelDetails : ChannelDetails }) => void
 }
@@ -51,13 +50,15 @@ type ChannelDetails = {
 
 
 const initialState : State = 
-    ({ name : "INITIAL_LOAD" })
+    { 
+      name : "INITIAL_LOAD"
+    }
 
 
 type Action =
-    { type : "REQUEST_CHANNEL_INFO" }
-  | { type : "UPDATE_CHANNEL_INFO", channelDetails : ChannelDetails }
-  | { type : "OPEN_THREAD", 
+  { type : "UPDATE_CHANNEL_INFO", channelDetails : ChannelDetails }
+  | 
+  { type : "OPEN_THREAD", 
       threadContent : ThreadContent[],
       channelDetails : ChannelDetails,
       title : string
@@ -70,19 +71,16 @@ type Action =
 const update =
     (state : State, action : Action) : State => {
       switch(action.type) {
-        case "REQUEST_CHANNEL_INFO":
-          return { 
-            name : "LOADING_CHANNEL_INFO" 
-          }
-
         case "UPDATE_CHANNEL_INFO":
           return { 
+            ...state,
             name : "LOADED", 
             channelDetails: action.channelDetails 
           }
 
         case "OPEN_THREAD": 
           return { 
+            ...state,
             name : "DISPLAYING_THREAD",
             channelDetails: action.channelDetails,
             threadContent: action.threadContent,
@@ -91,6 +89,7 @@ const update =
 
         case "CLOSE_THREAD":
           return {
+            ...state,
             name : "LOADED",
             channelDetails: action.channelDetails
           }
@@ -108,18 +107,9 @@ const ChannelProvider =
 
 
     const requestChannelInfo =
-      async (channelId : string) => 
+      (channelId : string) => 
          {
-            dispatch({ type: "REQUEST_CHANNEL_INFO" });
-
-            const response =
-              await fetch(`http://localhost:8000/channel/${channelId}`)
-              
-            const responseJson =
-              await response.json();
-            
-            
-            dispatch({ type: "UPDATE_CHANNEL_INFO", channelDetails: JSON.parse(responseJson.body)})
+            dispatch({ type: "UPDATE_CHANNEL_INFO", channelDetails: getChannel(channelId)})
          } 
       
 
@@ -133,7 +123,7 @@ const ChannelProvider =
            })
          }
 
-         
+
     const closeThread =
          ( { channelDetails } : { channelDetails : ChannelDetails } ) => {
            dispatch({
@@ -159,4 +149,4 @@ const ChannelProvider =
   }  
 
 
-export default ChannelProvider
+export default ChannelProvider;

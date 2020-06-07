@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { ApplicationContext, State } from "./ApplicationContext";
 import styled from "styled-components";
 import { BrowserRouter as Router,
@@ -24,28 +24,22 @@ const Wrapper =
 const App = 
   () => {
         const { 
-            applicationState,
-            loadApplicationData
+            applicationState
         } =
             useContext(ApplicationContext);
 
     
-        useEffect(() => {
-            if (applicationState.name === "INITIAL_LOAD") {
-                // TODO: Don't just hardcode the user ID here! :D 
-                loadApplicationData("Nimmo");
-            }
-        });
+        // useEffect(() => {
+        //     if (applicationState.name === "INITIAL_LOAD") {
+        //         // TODO: Don't just hardcode the user ID here! :D 
+        //         loadApplicationData("Nimmo");
+        //     }
+        // });
 
 
         const chooseState = 
             (state : State) => {
                 switch(state.name) {
-                case "INITIAL_LOAD":
-                case "LOADING":
-                    return; // TODO: Some sort of loading view;
-
-
                 case "DATA_LOADED":
                     return (
                         <Wrapper>
@@ -69,7 +63,6 @@ const App =
 
         return (
             <Router>
-                {/* <SearchBar/> */}
                 { chooseState(applicationState) }
             </Router>
         );
